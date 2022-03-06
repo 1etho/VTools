@@ -5,6 +5,8 @@ import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
+import de.strifel.VTools.VTools;
+import de.strifel.VTools.util.Chat;
 import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;
@@ -31,10 +33,15 @@ public class CommandSendall implements SimpleCommand {
             if (oServer.isPresent()) {
                 for (Player player : server.getAllPlayers()) {
                     player.createConnectionRequest(oServer.get()).connect();
-                    player.sendMessage(Component.text("You are being sent to " + strings[0]).color(COLOR_YELLOW));
+                    player.sendMessage(Chat.color(VTools.getConfig().getString("send-command.got-sent"), player));
+                    //player.sendMessage(Component.text("You are being sent to " + strings[0]).color(COLOR_YELLOW));
                 }
+                commandSource.sendMessage(Chat.color(VTools.getConfig().getString("send-command.sent-all")
+                        .replace("%players%", Integer.toString(server.getAllPlayers().size()))
+                        .replace("%server%", oServer.get().getServerInfo().getName())));
             } else {
-                commandSource.sendMessage(Component.text("The server does not exists!").color(COLOR_RED));
+                commandSource.sendMessage(Chat.color(VTools.getConfig().getString("send-command.error")));
+                //commandSource.sendMessage(Component.text("The server does not exists!").color(COLOR_RED));
             }
         } else {
             commandSource.sendMessage(Component.text("Usage: /sendall <server>").color(COLOR_RED));
@@ -48,7 +55,7 @@ public class CommandSendall implements SimpleCommand {
         List<String> arg = new ArrayList<String>();
         if (currentArgs.length == 1) {
             for (RegisteredServer server : server.getAllServers()) {
-                arg.add(server.getServerInfo().getName());
+                if (currentArgs[0].startsWith(server.getServerInfo().getName())) arg.add(server.getServerInfo().getName());
             }
         }
         return arg;

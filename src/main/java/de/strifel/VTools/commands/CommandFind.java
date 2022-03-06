@@ -4,6 +4,8 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import de.strifel.VTools.VTools;
+import de.strifel.VTools.util.Chat;
 import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;
@@ -29,8 +31,11 @@ public class CommandFind implements SimpleCommand {
         if (strings.length == 1) {
             Optional<Player> player = server.getPlayer(strings[0]);
             if (player.isPresent() && player.get().getCurrentServer().isPresent()) {
-                commandSource.sendMessage(Component.text("Player " + strings[0] + " is on " + player.get().getCurrentServer().get().getServerInfo().getName() + "!").color(COLOR_YELLOW));
+                commandSource.sendMessage(Chat.color(VTools.getConfig().getString("find-command.player-found"), player.get()));
+                //commandSource.sendMessage(Component.text("Player " + strings[0] + " is on " + player.get().getCurrentServer().get().getServerInfo().getName() + "!").color(COLOR_YELLOW));
             } else {
+                commandSource.sendMessage(Chat.color(VTools.getConfig().getString("find-command.player-not-online")
+                        .replace("%player%", strings[0])));
                 commandSource.sendMessage(Component.text("The player is not online!").color(COLOR_YELLOW));
             }
         } else {
@@ -45,7 +50,7 @@ public class CommandFind implements SimpleCommand {
         List<String> arg = new ArrayList<>();
         if (currentArgs.length == 1 && invocation.source().hasPermission("vtools.find.autocomplete")) {
             for (Player player : server.getAllPlayers()) {
-                arg.add(player.getUsername());
+                if (currentArgs[0].startsWith(player.getUsername())) arg.add(player.getUsername());
             }
         }
         return arg;

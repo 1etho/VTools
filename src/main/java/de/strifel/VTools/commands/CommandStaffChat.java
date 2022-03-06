@@ -4,6 +4,8 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import de.strifel.VTools.VTools;
+import de.strifel.VTools.util.Chat;
 import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;
@@ -27,10 +29,12 @@ public class CommandStaffChat implements SimpleCommand {
 
         if (strings.length > 0) {
             String channel = strings[0].startsWith("c:") && !strings[0].equals("c:") ? strings[0].split(":")[1] : null;
-            String message = "§4[Staff]§r " + (commandSource instanceof Player ? ((Player) commandSource).getUsername() : "Console") + (channel != null ? " (" + channel + ")" : "")+ " > " + String.join(" ", Arrays.copyOfRange(strings, channel == null ? 0 : 1, strings.length)).replace("&", "§");
+            //String message = "§4[Staff]§r " + (commandSource instanceof Player ? ((Player) commandSource).getUsername() : "Console") + (channel != null ? " (" + channel + ")" : "")+ " > " + String.join(" ", Arrays.copyOfRange(strings, channel == null ? 0 : 1, strings.length)).replace("&", "§");
+            String message = VTools.getConfig().getString("staff-chat.format")
+                    .replace("%message%", String.join(" ", Arrays.copyOfRange(strings, channel == null ? 0 : 1, strings.length)));
             for (Player player : server.getAllPlayers()) {
                 if (player.hasPermission("vtools.staffchat" + (channel != null ? "." + channel : ""))) {
-                    player.sendMessage(Component.text(message));
+                    player.sendMessage(Chat.color(message, (commandSource instanceof Player ? ((Player) commandSource) : null)));
                 }
             }
         } else {

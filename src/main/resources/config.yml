@@ -1,0 +1,17 @@
+
+find-command:
+  player-found: "&7Found &b%player% in &b%server%&7."
+  player-not-online: "&7Couldn't find &b%player%&7, they might be offline."
+
+send-command:
+  sent: "&7Sent &b%player% &7to &b%server%&7!"
+  sent-all: "&7You sent &b%players% &7to &b%server%&7!"
+  got-sent: "&7You were sent to &b%server% &7forcefully."
+  error: "&7The server or player cannot be found."
+
+staff-chat:
+  format: "&7[&b%server%&7] &7%prefix% &b%player% &9» &f%message%"
+
+tps-command:
+  connecting: "&7Connecting to &b%player%&7's server (&b%server%&7)!"
+  not-online: "&7That player could not be found."

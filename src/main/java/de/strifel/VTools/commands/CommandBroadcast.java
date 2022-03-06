@@ -4,6 +4,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import de.strifel.VTools.util.Chat;
 import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;
@@ -24,12 +25,12 @@ public class CommandBroadcast implements SimpleCommand {
         String[] strings = invocation.arguments();
 
         if (strings.length > 0) {
-            String message = String.join(" ", strings).replace("&", "§");
+            String message = String.join(" ", strings);
             for (Player player : server.getAllPlayers()) {
-                player.sendMessage(Component.text(message));
+                player.sendMessage(Chat.color(message, player));
             }
         } else {
-            commandSource.sendMessage(Component.text("Usage: /broadcast <message>").color(COLOR_RED));
+            commandSource.sendMessage(Chat.color("&cUsage: /broadcast <message>"));
         }
     }
 

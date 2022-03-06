@@ -5,8 +5,11 @@ import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
+import de.strifel.VTools.VTools;
+import de.strifel.VTools.util.Chat;
 import net.kyori.adventure.text.Component;
 
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,10 +35,13 @@ public class CommandSend implements SimpleCommand {
                 Player player = oPlayer.get();
                 RegisteredServer server = oServer.get();
                 player.createConnectionRequest(server).connect();
-                commandSource.sendMessage(Component.text("You send " + player.getUsername() + " to " + server.getServerInfo().getName()).color(COLOR_YELLOW));
-                commandSource.sendMessage(Component.text("You got send to " + server.getServerInfo().getName()).color(COLOR_YELLOW));
+                commandSource.sendMessage(Chat.color(VTools.getConfig().getString("send-command.sent"), player));
+                player.sendMessage(Chat.color(VTools.getConfig().getString("send-command.got-sent"), player));
+                //commandSource.sendMessage(Component.text("You send " + player.getUsername() + " to " + server.getServerInfo().getName()).color(COLOR_YELLOW));
+                //commandSource.sendMessage(Component.text("You got send to " + server.getServerInfo().getName()).color(COLOR_YELLOW));
             } else {
-                commandSource.sendMessage(Component.text("The server or user does not exists!").color(COLOR_RED));
+                commandSource.sendMessage(Chat.color(VTools.getConfig().getString("send-command.error")));
+                //commandSource.sendMessage(Component.text("The server or user does not exists!").color(COLOR_RED));
             }
         } else {
             commandSource.sendMessage(Component.text("Usage: /send <username> <server>").color(COLOR_RED));
@@ -48,12 +54,12 @@ public class CommandSend implements SimpleCommand {
         List<String> arg = new ArrayList<String>();
         if (currentArgs.length == 1) {
             for (Player player : server.getAllPlayers()) {
-                arg.add(player.getUsername());
+                if (currentArgs[0].startsWith(player.getUsername())) arg.add(player.getUsername());
             }
             return arg;
         } else if (currentArgs.length == 2) {
             for (RegisteredServer server : server.getAllServers()) {
-                arg.add(server.getServerInfo().getName());
+                if (currentArgs[1].startsWith(server.getServerInfo().getName())) arg.add(server.getServerInfo().getName());
             }
         }
         return arg;
