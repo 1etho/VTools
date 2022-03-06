@@ -54,6 +54,7 @@ public class VTools {
         server.getCommandManager().register("restart", new CommandRestart(server));
         server.getCommandManager().register("tps", new CommandTp(server), "jump");
         server.getCommandManager().register("servers", new CommandServers(server), "allservers");
+        server.getCommandManager().register("vtools", new CommandVTools(server), "vt");
     }
 
     public static VTools get() {

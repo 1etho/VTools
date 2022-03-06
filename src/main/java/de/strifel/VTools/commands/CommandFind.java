@@ -50,7 +50,7 @@ public class CommandFind implements SimpleCommand {
         List<String> arg = new ArrayList<>();
         if (currentArgs.length == 1 && invocation.source().hasPermission("vtools.find.autocomplete")) {
             for (Player player : server.getAllPlayers()) {
-                if (currentArgs[0].startsWith(player.getUsername())) arg.add(player.getUsername());
+                if (player.getUsername().startsWith(currentArgs[0])) arg.add(player.getUsername());
             }
         }
         return arg;

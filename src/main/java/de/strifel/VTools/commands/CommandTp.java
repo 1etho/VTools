@@ -54,7 +54,7 @@ public class CommandTp implements SimpleCommand {
         List<String> arg = new ArrayList<>();
         if (commandInvocation.arguments().length == 1) {
             for (Player player : server.getAllPlayers()) {
-                if (currnetArgs[0].startsWith(player.getUsername())) arg.add(player.getUsername());
+                if (player.getUsername().startsWith(currnetArgs[0])) arg.add(player.getUsername());
             }
         }
         return arg;

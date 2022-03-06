@@ -33,7 +33,8 @@ public class CommandSendall implements SimpleCommand {
             if (oServer.isPresent()) {
                 for (Player player : server.getAllPlayers()) {
                     player.createConnectionRequest(oServer.get()).connect();
-                    player.sendMessage(Chat.color(VTools.getConfig().getString("send-command.got-sent"), player));
+                    player.sendMessage(Chat.color(VTools.getConfig().getString("send-command.got-sent")
+                            .replace("%server%", strings[0]), player));
                     //player.sendMessage(Component.text("You are being sent to " + strings[0]).color(COLOR_YELLOW));
                 }
                 commandSource.sendMessage(Chat.color(VTools.getConfig().getString("send-command.sent-all")
@@ -55,7 +56,7 @@ public class CommandSendall implements SimpleCommand {
         List<String> arg = new ArrayList<String>();
         if (currentArgs.length == 1) {
             for (RegisteredServer server : server.getAllServers()) {
-                if (currentArgs[0].startsWith(server.getServerInfo().getName())) arg.add(server.getServerInfo().getName());
+                if (server.getServerInfo().getName().startsWith(currentArgs[0])) arg.add(server.getServerInfo().getName());
             }
         }
         return arg;

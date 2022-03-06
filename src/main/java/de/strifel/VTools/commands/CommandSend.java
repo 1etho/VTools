@@ -13,6 +13,7 @@ import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static de.strifel.VTools.VTools.COLOR_RED;
 import static de.strifel.VTools.VTools.COLOR_YELLOW;
@@ -35,8 +36,10 @@ public class CommandSend implements SimpleCommand {
                 Player player = oPlayer.get();
                 RegisteredServer server = oServer.get();
                 player.createConnectionRequest(server).connect();
-                commandSource.sendMessage(Chat.color(VTools.getConfig().getString("send-command.sent"), player));
-                player.sendMessage(Chat.color(VTools.getConfig().getString("send-command.got-sent"), player));
+                commandSource.sendMessage(Chat.color(VTools.getConfig().getString("send-command.sent")
+                        .replace("%server%", strings[1]), player));
+                player.sendMessage(Chat.color(VTools.getConfig().getString("send-command.got-sent")
+                        .replace("%server%", strings[1]), player));
                 //commandSource.sendMessage(Component.text("You send " + player.getUsername() + " to " + server.getServerInfo().getName()).color(COLOR_YELLOW));
                 //commandSource.sendMessage(Component.text("You got send to " + server.getServerInfo().getName()).color(COLOR_YELLOW));
             } else {
@@ -48,18 +51,17 @@ public class CommandSend implements SimpleCommand {
         }
     }
 
+    @Override
     public List<String> suggest(SimpleCommand.Invocation invocation) {
         String[] currentArgs = invocation.arguments();
-
         List<String> arg = new ArrayList<String>();
         if (currentArgs.length == 1) {
             for (Player player : server.getAllPlayers()) {
-                if (currentArgs[0].startsWith(player.getUsername())) arg.add(player.getUsername());
+                if (player.getUsername().startsWith(currentArgs[0])) arg.add(player.getUsername());
             }
-            return arg;
         } else if (currentArgs.length == 2) {
             for (RegisteredServer server : server.getAllServers()) {
-                if (currentArgs[1].startsWith(server.getServerInfo().getName())) arg.add(server.getServerInfo().getName());
+                if (server.getServerInfo().getName().startsWith(currentArgs[1])) arg.add(server.getServerInfo().getName());
             }
         }
         return arg;
