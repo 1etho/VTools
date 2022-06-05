@@ -1,26 +1,27 @@
-package de.strifel.VTools.commands;
+package com.mattmx.vtools.commands;
 
+import com.mattmx.vtools.VTools;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
+import com.velocitypowered.api.command.VelocityBrigadierMessage;
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
-import de.strifel.VTools.VTools;
-import de.strifel.VTools.util.Chat;
-import net.kyori.adventure.text.Component;
+import com.mattmx.vtools.util.Chat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static de.strifel.VTools.VTools.COLOR_RED;
+import java.util.UUID;
 
 public class CommandStaffChat implements SimpleCommand {
     private final ProxyServer server;
+    private List<String> toggled = new ArrayList<>();
 
     public CommandStaffChat(ProxyServer server) {
         this.server = server;
     }
-
 
     @Override
     public void execute(SimpleCommand.Invocation invocation) {
@@ -38,7 +39,15 @@ public class CommandStaffChat implements SimpleCommand {
                 }
             }
         } else {
-            commandSource.sendMessage(Component.text("Usage: /broadcast <message>").color(COLOR_RED));
+            if (invocation.source() instanceof Player p) {
+                if (toggled.contains(p.getUniqueId().toString())) {
+                    toggled.remove(p.getUniqueId().toString());
+                    p.sendMessage(Chat.color(VTools.getConfig().getString("staff-chat.toggled").replace("%state%", "off")));
+                } else {
+                    toggled.add(p.getUniqueId().toString());
+                    p.sendMessage(Chat.color(VTools.getConfig().getString("staff-chat.toggled").replace("%state%", "on")));
+                }
+            }
         }
     }
 
@@ -51,4 +60,21 @@ public class CommandStaffChat implements SimpleCommand {
     public boolean hasPermission(SimpleCommand.Invocation invocation) {
         return invocation.source().hasPermission("vtools.staffchat");
     }
+
+    @Subscribe
+    public void onChat(PlayerChatEvent e) {
+        if (!toggled.contains(e.getPlayer().getUniqueId().toString())) return;
+        if (e.getPlayer().hasPermission("vtools.staffchat")) {
+            String message = VTools.getConfig().getString("staff-chat.format").replace("%message%", e.getMessage());
+            for (Player player : server.getAllPlayers()) {
+                if (player.hasPermission("vtools.staffchat")) {
+                    player.sendMessage(Chat.color(message, e.getPlayer()));
+                }
+            }
+        } else {
+            e.getPlayer().sendMessage(Chat.color(VTools.getConfig().getString("staff-chat.toggled").replace("%state%", "off")));
+            toggled.remove(e.getPlayer().getUniqueId().toString());
+        }
+    }
+
 }

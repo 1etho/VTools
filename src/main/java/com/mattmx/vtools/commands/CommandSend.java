@@ -1,22 +1,19 @@
-package de.strifel.VTools.commands;
+package com.mattmx.vtools.commands;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import de.strifel.VTools.VTools;
-import de.strifel.VTools.util.Chat;
+import com.mattmx.vtools.VTools;
+import com.mattmx.vtools.util.Chat;
 import net.kyori.adventure.text.Component;
 
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static de.strifel.VTools.VTools.COLOR_RED;
-import static de.strifel.VTools.VTools.COLOR_YELLOW;
+import static com.mattmx.vtools.VTools.COLOR_RED;
 
 public class CommandSend implements SimpleCommand {
     private final ProxyServer server;

@@ -1,4 +1,4 @@
-package de.strifel.VTools.commands;
+package com.mattmx.vtools.commands;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
@@ -9,7 +9,7 @@ import net.kyori.adventure.text.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import static de.strifel.VTools.VTools.COLOR_YELLOW;
+import static com.mattmx.vtools.VTools.COLOR_YELLOW;
 
 public class CommandServers implements SimpleCommand {
     private final ProxyServer server;

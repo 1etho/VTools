@@ -11,6 +11,7 @@ send-command:
 
 staff-chat:
   format: "&7[&b%server%&7] &7%prefix% &b%player% &9» &f%message%"
+  toggled: "&7Staff Chat toggled &f%state%"
 
 tps-command:
   connecting: "&7Connecting to &b%player%&7's server (&b%server%&7)!"

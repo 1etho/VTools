@@ -1,6 +1,6 @@
-package de.strifel.VTools.util;
+package com.mattmx.vtools.util;
 
-import de.strifel.VTools.VTools;
+import com.mattmx.vtools.VTools;
 import org.simpleyaml.configuration.file.YamlConfiguration;
 
 import java.io.File;

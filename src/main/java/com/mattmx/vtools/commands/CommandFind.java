@@ -1,19 +1,16 @@
-package de.strifel.VTools.commands;
+package com.mattmx.vtools.commands;
 
+import com.mattmx.vtools.VTools;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
-import de.strifel.VTools.VTools;
-import de.strifel.VTools.util.Chat;
+import com.mattmx.vtools.util.Chat;
 import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static de.strifel.VTools.VTools.COLOR_RED;
-import static de.strifel.VTools.VTools.COLOR_YELLOW;
 
 public class CommandFind implements SimpleCommand {
     private final ProxyServer server;
@@ -36,10 +33,10 @@ public class CommandFind implements SimpleCommand {
             } else {
                 commandSource.sendMessage(Chat.color(VTools.getConfig().getString("find-command.player-not-online")
                         .replace("%player%", strings[0])));
-                commandSource.sendMessage(Component.text("The player is not online!").color(COLOR_YELLOW));
+                commandSource.sendMessage(Component.text("The player is not online!").color(VTools.COLOR_YELLOW));
             }
         } else {
-            commandSource.sendMessage(Component.text("Usage: /find <username>").color(COLOR_RED));
+            commandSource.sendMessage(Component.text("Usage: /find <username>").color(VTools.COLOR_RED));
         }
     }
 

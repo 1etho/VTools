@@ -1,23 +1,21 @@
-package de.strifel.VTools.commands;
+package com.mattmx.vtools.commands;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
-import de.strifel.VTools.util.Chat;
 import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static de.strifel.VTools.VTools.COLOR_RED;
-
-public class CommandBroadcast implements SimpleCommand {
+public class CommandRestart implements SimpleCommand {
     private final ProxyServer server;
 
-    public CommandBroadcast(ProxyServer server) {
+    public CommandRestart(ProxyServer server) {
         this.server = server;
     }
+
 
     @Override
     public void execute(SimpleCommand.Invocation invocation) {
@@ -25,13 +23,12 @@ public class CommandBroadcast implements SimpleCommand {
         String[] strings = invocation.arguments();
 
         if (strings.length > 0) {
-            String message = String.join(" ", strings);
+            String message = String.join(" ", strings).replace("&", "§");
             for (Player player : server.getAllPlayers()) {
-                player.sendMessage(Chat.color(message, player));
+                player.disconnect(Component.text(message));
             }
-        } else {
-            commandSource.sendMessage(Chat.color("&cUsage: /broadcast <message>"));
         }
+        server.getCommandManager().executeAsync(server.getConsoleCommandSource(), "shutdown");
     }
 
     @Override
@@ -41,6 +38,6 @@ public class CommandBroadcast implements SimpleCommand {
 
     @Override
     public boolean hasPermission(SimpleCommand.Invocation invocation) {
-        return invocation.source().hasPermission("vtools.broadcast");
+        return invocation.source().hasPermission("vtools.shutdown");
     }
 }

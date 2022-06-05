@@ -1,7 +1,7 @@
-package de.strifel.VTools.util;
+package com.mattmx.vtools.util;
 
+import com.mattmx.vtools.VTools;
 import com.velocitypowered.api.proxy.Player;
-import de.strifel.VTools.VTools;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.luckperms.api.LuckPerms;

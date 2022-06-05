@@ -1,12 +1,12 @@
-package de.strifel.VTools;
+package com.mattmx.vtools;
 
+import com.mattmx.vtools.commands.*;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
-import de.strifel.VTools.commands.*;
-import de.strifel.VTools.util.Config;
-import de.strifel.VTools.util.DependencyChecker;
+import com.mattmx.vtools.util.Config;
+import com.mattmx.vtools.util.DependencyChecker;
 import net.kyori.adventure.text.format.TextColor;
 import net.luckperms.api.LuckPermsProvider;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +25,7 @@ public class VTools {
     private final Logger logger;
     private final ProxyServer server;
     private final File dataFolder;
+    private boolean protocolize;
 
     public static final TextColor COLOR_RED = TextColor.fromCSSHexString("FF5555");
     public static final TextColor COLOR_YELLOW = TextColor.fromCSSHexString("FFFF55");
@@ -45,6 +46,13 @@ public class VTools {
         } else {
             logger.warn("Missing LuckPerms, some placeholders will not be available.");
         }
+        if (DependencyChecker.protocolize()) {
+            logger.info("Protocolize installed!");
+            protocolize = true;
+        } else {
+            logger.warn("Protocolize not installed. Please install for GUI support.");
+            protocolize = false;
+        }
         Config.init();
         server.getCommandManager().register("send", new CommandSend(server));
         server.getCommandManager().register("sendall", new CommandSendall(server));
@@ -55,6 +63,7 @@ public class VTools {
         server.getCommandManager().register("tps", new CommandTp(server), "jump");
         server.getCommandManager().register("servers", new CommandServers(server), "allservers");
         server.getCommandManager().register("vtools", new CommandVTools(server), "vt");
+        server.getEventManager().register(this, new CommandStaffChat(server));
     }
 
     public static VTools get() {
